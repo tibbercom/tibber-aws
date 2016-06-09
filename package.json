@@ -1,0 +1,32 @@
+{
+  "name": "tibber-aws",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "start": "babel-node ./samples/sample1.js",
+    "build": "babel ./src -d ./lib",
+    "2npm": "publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tibbercom/tibber-postgres.git"
+  },
+  "homepage": "https://github.com/tibbercom/tibber-postgres#readme",
+  "author": "tibber",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.0",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-preset-node6": "^11.0.0",
+    "publish": "^0.6.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "aws-bluebird": "^1.0.0"
+  }
+}
