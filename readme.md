@@ -1,7 +1,6 @@
 # tibber-aws
 
-```javascript
-
+```
 import {Topic, Queue} from 'tibber-aws';
 
 const topic = await Topic.createTopic('test-topic', 'test subject');
