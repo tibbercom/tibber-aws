@@ -73,6 +73,8 @@ export class Queue {
         
         let statement = policy.Statement[0];
 
+        statement.Resource = statement.Resource || this.queueArn;
+
         if (!statement.Condition) {
             statement.Condition = {};
         }
@@ -84,6 +86,7 @@ export class Queue {
         if (!statement.Condition.ArnLike["aws:SourceArn"]) {
             statement.Condition.ArnLike["aws:SourceArn"] = []
         }
+               
 
         let sourceArns = statement.Condition.ArnLike["aws:SourceArn"];
 
