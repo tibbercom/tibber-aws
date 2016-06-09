@@ -5,32 +5,30 @@ AWS.config.region = 'eu-west-1';
 
 
 async function sample() {
-    const topic = await Topic.createTopic('test-mig', 'test subject');
+
+    //create (or get) topics
+    const topic = await Topic.createTopic('test-', 'test subject');
     const topic2 = await Topic.createTopic('test-mig2', 'test subject2');
+
+    //create (or get) queue
     const queue = await Queue.createQueue('test-mig3');
 
-    console.log(queue);
-
+    //subscribe queue to topics
     await queue.subscribeTopic(topic);
     await queue.subscribeTopic(topic2);
 
-    await topic.push({test:"test"});
-    await topic2.push({test:"test"});
-
-    //console.log(topic);
-
+    //push json event to queue  
+    await topic.push({ test: "test" });
+    await topic2.push({ test: "test" });
 }
-
 
 sample().then(_ => {
-
     console.log("Sample done");
     process.exit(0);
-}).catch(err =>{
+}).
+    catch(err => {
+        console.log('ERROR');
+        console.log(err);
 
-   console.log('ERROR');    
-    console.log(err);
-
-}
-    );
+    });
 
