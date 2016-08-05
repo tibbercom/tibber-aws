@@ -1,12 +1,13 @@
 {
   "name": "tibber-aws",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
     "start": "babel-node ./samples/sample1.js",
     "build": "babel ./src -d ./lib",
-    "2npm": "publish"
+    "2npm": "publish",
+    "test":  "ava --require babel-register --verbose -s"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,7 @@
   "author": "tibber",
   "license": "ISC",
   "devDependencies": {
+    "ava": "^0.15.2",
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.0",
     "babel-plugin-syntax-async-functions": "^6.8.0",
