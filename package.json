@@ -1,13 +1,13 @@
 {
   "name": "tibber-aws",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
     "start": "babel-node ./samples/sample1.js",
     "build": "babel ./src -d ./lib",
     "2npm": "publish",
-    "test":  "ava --require babel-register --verbose -s"
+    "test": "ava --require babel-register --verbose -s"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "aws-bluebird": "^1.0.0"
+    "aws-bluebird": "^1.0.0",
+    "babel-register": "^6.11.6"
   }
 }
