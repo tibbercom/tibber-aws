@@ -44,9 +44,9 @@ export class Queue {
         let policy = policyTemplate;
 
         if (response.Attributes.Policy) {
-            policy = JSON.parse(response.Attributes.Policy);    
+            policy = JSON.parse(response.Attributes.Policy);
         }
-        
+
         let statement = policy.Statement[0];
 
         statement.Resource = statement.Resource || this.queueArn;
@@ -62,14 +62,14 @@ export class Queue {
         if (!statement.Condition.ArnLike["aws:SourceArn"]) {
             statement.Condition.ArnLike["aws:SourceArn"] = []
         }
-               
+
 
         let sourceArns = statement.Condition.ArnLike["aws:SourceArn"];
 
-        if (!(sourceArns instanceof Array)){
+        if (!(sourceArns instanceof Array)) {
             sourceArns = [sourceArns];
             statement.Condition.ArnLike["aws:SourceArn"] = sourceArns;
-        }  
+        }
 
         if (sourceArns.filter(a => a === topic.topicArn).length > 0) {
             await subFunc();
@@ -135,12 +135,19 @@ export class QueueSubjectListener {
                 }
                 await Promise.all(response.Messages.map(m => {
                     let json = JSON.parse(m.Body);
-                    return {
-                        handle: m.ReceiptHandle,
-                        message: {
-                            subject: json.Subject,
-                            message: JSON.parse(json.Message)
+
+                    try {
+                        return {
+                            handle: m.ReceiptHandle,
+                            message: {
+                                subject: json.Subject,
+                                message: JSON.parse(json.Message)
+                            }
                         }
+                    }
+                    catch (error) {
+                        console.error('Not able to parse event as json');
+                        return { handle: m.ReceiptHandle, message: { subject: "Delete Me" } }
                     }
                 }).map(async (m) => {
 
