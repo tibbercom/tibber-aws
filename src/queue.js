@@ -153,9 +153,16 @@ export class QueueSubjectListener {
 
                     if (self.handlers[m.message.subject]) {
 
-                        self.handlers[m.message.subject].forEach(async (h) => {
-                            await h(m.message.message);
-                        });
+                        await Promise.all(self.handlers[m.message.subject].map(async (h) => {
+                            try {
+                                await h(m.message.message);
+                                return true;
+                            }
+                            catch (error) {
+                                console.log(error);
+                                return false;
+                            }
+                        }));
                     }
                     await self.queue.deleteMessage(m.handle);
 
