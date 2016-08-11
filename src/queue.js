@@ -165,7 +165,7 @@ export class QueueSubjectListener {
                         }
                     }
                     catch (error) {
-                        this._logger.error('Not able to parse event as json');
+                        self._logger.error('Not able to parse event as json');
                         return { handle: m.ReceiptHandle, message: { subject: "Delete Me" } }
                     }
                 }).map(async (m) => {
@@ -177,17 +177,17 @@ export class QueueSubjectListener {
                                 await h(m.message.message);                                
                             }
                             catch (error) {
-                                this._logger.log(error);                                
+                                self._logger.log(error);                                
                             }
                         }));
                     }
                     await self.queue.deleteMessage(m.handle);
-                    this._logger.info('Message deleted');
+                    self._logger.info('Message deleted');
 
                 }));
             }
             catch (err) {
-                this._logger.error(err);
+                self._logger.error(err);
             }
             setTimeout(handlerFunc, 100);
         };
