@@ -96,19 +96,38 @@ export class Queue {
 
     async deleteMessage(receiptHandle) {
         let props = { QueueUrl: this.queueUrl, ReceiptHandle: receiptHandle };
-        const response = await this.sqs.deleteMessage(props);
-        console.log('Message deleted');
+        const response = await this.sqs.deleteMessage(props);        
+    }
+}
+
+class LoggerWrapper {
+
+    constructor(logger) {
+        this._logger = logger;
+    }
+
+    log(message) {
+        this._logger.log ? this._logger.log(message) : console.log(message);
+    }
+
+    info(message) {
+        this._logger.info ? this._logger.info(message) : console.log(message);
+    }
+
+    error(message) {
+        this._logger.error ? this._logger.error(message) : console.log(message);
     }
 }
 
 export class QueueSubjectListener {
 
-    constructor(queue) {
+    constructor(queue, logger) {
         this.queue = queue;
         this.defaultParams = {
             MaxNumberOfMessages: 1,
             WaitTimeSeconds: 10
         };
+        this._logger = new LoggerWrapper(logger);
     }
 
     onSubject(subjectName, handler) {
@@ -146,7 +165,7 @@ export class QueueSubjectListener {
                         }
                     }
                     catch (error) {
-                        console.error('Not able to parse event as json');
+                        this._logger.error('Not able to parse event as json');
                         return { handle: m.ReceiptHandle, message: { subject: "Delete Me" } }
                     }
                 }).map(async (m) => {
@@ -155,21 +174,20 @@ export class QueueSubjectListener {
 
                         await Promise.all(self.handlers[m.message.subject].map(async (h) => {
                             try {
-                                await h(m.message.message);
-                                return true;
+                                await h(m.message.message);                                
                             }
                             catch (error) {
-                                console.log(error);
-                                return false;
+                                this._logger.log(error);                                
                             }
                         }));
                     }
                     await self.queue.deleteMessage(m.handle);
+                    this._logger.info('Message deleted');
 
                 }));
             }
             catch (err) {
-                console.log(err);
+                this._logger.error(err);
             }
             setTimeout(handlerFunc, 100);
         };
