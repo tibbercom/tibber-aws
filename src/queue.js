@@ -93,7 +93,7 @@ export class Queue {
 class LoggerWrapper {
 
     constructor(logger) {
-        this._logger = logger;
+        this._logger = logger||{};
     }
 
     log(message) {
