@@ -163,7 +163,7 @@ export class QueueSubjectListener {
 
                     if (self.handlers[m.message.subject] || self.handlers["*"]) {
 
-                        await Promise.all(self.handlers[m.message.subject].concat(self.handlers["*"]||[]).map(async (h) => {
+                        await Promise.all((self.handlers[m.message.subject]||[]).concat(self.handlers["*"]||[]).map(async (h) => {
                             try {
                                 await h(m.message.message,m.message.subject);
                             }
