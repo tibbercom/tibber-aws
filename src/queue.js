@@ -50,9 +50,9 @@ export class Queue {
         let statement = policy.Statement[0];
 
         statement.Resource = statement.Resource || this.queueArn;
-        statement.Condition = statement.Condition ||{};
-        statement.Condition.ArnLike = statement.Condition.ArnLike||{}
-        statement.Condition.ArnLike["aws:SourceArn"] = statement.Condition.ArnLike["aws:SourceArn"] ||[];
+        statement.Condition = statement.Condition || {};
+        statement.Condition.ArnLike = statement.Condition.ArnLike || {}
+        statement.Condition.ArnLike["aws:SourceArn"] = statement.Condition.ArnLike["aws:SourceArn"] || [];
 
         let sourceArns = statement.Condition.ArnLike["aws:SourceArn"];
 
@@ -86,14 +86,14 @@ export class Queue {
 
     async deleteMessage(receiptHandle) {
         let props = { QueueUrl: this.queueUrl, ReceiptHandle: receiptHandle };
-        const response = await this.sqs.deleteMessage(props);        
+        const response = await this.sqs.deleteMessage(props);
     }
 }
 
 class LoggerWrapper {
 
     constructor(logger) {
-        this._logger = logger||{};
+        this._logger = logger || {};
     }
 
     log(message) {
@@ -118,6 +118,7 @@ export class QueueSubjectListener {
             WaitTimeSeconds: 10
         };
         this._logger = new LoggerWrapper(logger);
+
     }
 
     onSubject(subjectName, handler) {
@@ -160,14 +161,14 @@ export class QueueSubjectListener {
                     }
                 }).map(async (m) => {
 
-                    if (self.handlers[m.message.subject]) {
+                    if (self.handlers[m.message.subject] || self.handlers["*"]) {
 
-                        await Promise.all(self.handlers[m.message.subject].map(async (h) => {
+                        await Promise.all(self.handlers[m.message.subject].concat(self.handlers["*"]||[]).map(async (h) => {
                             try {
-                                await h(m.message.message);                                
+                                await h(m.message.message);
                             }
                             catch (error) {
-                                self._logger.log(error);                                
+                                self._logger.log(error);
                             }
                         }));
                     }
