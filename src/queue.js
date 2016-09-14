@@ -1,4 +1,5 @@
 import AWS from 'aws-bluebird';
+import {Topic} from './topic';
 
 let policyTemplate = {
     "Version": "2012-10-17",
@@ -130,7 +131,6 @@ export class QueueSubjectListener {
 
     listen(params) {
 
-
         params = params || this.defaultParams;
 
         let self = this;
@@ -163,9 +163,9 @@ export class QueueSubjectListener {
 
                     if (self.handlers[m.message.subject] || self.handlers["*"]) {
 
-                        await Promise.all((self.handlers[m.message.subject]||[]).concat(self.handlers["*"]||[]).map(async (h) => {
+                        await Promise.all((self.handlers[m.message.subject] || []).concat(self.handlers["*"] || []).map(async (h) => {
                             try {
-                                await h(m.message.message,m.message.subject);
+                                await h(m.message.message, m.message.subject);
                             }
                             catch (error) {
                                 self._logger.log(error);
@@ -185,4 +185,32 @@ export class QueueSubjectListener {
         setTimeout(handlerFunc, 10);
     }
 
+}
+
+export class QueueSubjectListenerBuilder {
+
+    set topicInfo() {
+        this._topicInfo = this._topicInfo || [];
+        this._topicInfo.push(value);
+    }
+
+    get topicInfo() {
+        return this._topicInfo || [];
+    }
+
+    async build() {
+
+        if (!this.queueName)
+            throw new Error('"queueName" must be specified');
+
+        let queue = await Queue.createQueue(this.queueName);
+
+        await Promise.all(this.topicInfo.map(t => {
+            let topic = await Topic.createTopic(t.name, t.subject);
+            await queue.subscribeTopic(topic);
+        }));
+
+        return new QueueSubjectListener(queue, this.logger);
+
+    }
 }
