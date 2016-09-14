@@ -50,9 +50,8 @@ test('should be able to retrieve object', async (t) => {
     t.pass();
 });
 
-test('should be able to assign several topics to builder', t=>{
+test('should be able to assign several topics to builder',(t) =>{
 
-   let builder = new QueueSubjectListenerBuilder('queueName', null, {name:'test', subject: 'test'},{name:'test2', subject: 'test2'})
+   let builder = new QueueSubjectListenerBuilder('test-queueName', null, {name:'test', subject: 'test'},{name:'test2', subject: 'test2'})
    t.is(builder.topics.length,2);
-
 });

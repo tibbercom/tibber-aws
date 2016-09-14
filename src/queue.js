@@ -188,7 +188,6 @@ export class QueueSubjectListener {
 }
 
 export class QueueSubjectListenerBuilder {
-
     constructor(queueName,logger, ...topics){
         this.queueName = queueName;
         this.logger = logger;
