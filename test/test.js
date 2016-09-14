@@ -1,7 +1,8 @@
 import test from 'ava';
 import AWS from 'aws-bluebird';
 AWS.config.region = 'eu-west-1';
-import {S3Bucket} from '../src/s3.js';
+import {S3Bucket} from '../src/s3';
+import {QueueSubjectListenerBuilder} from '../src/queue';
 
 
 const testBucketName = 'tibber-tibber-ftw-123321';
@@ -41,10 +42,17 @@ test('should be able to put object with content type', async (t) => {
     t.pass();
 });
 
-test.only('should be able to retrieve object', async (t) => {
+test('should be able to retrieve object', async (t) => {
     const bucket = await S3Bucket.getBucket(testBucketName);
     var buffer = new Buffer([ 8, 6, 7, 5, 3, 0, 9]);
     await bucket.putObject('test', buffer, 'image/png');
     const result = await bucket.getObject('test');
     t.pass();
+});
+
+test('should be able to assign several topics to builder', t=>{
+
+   let builder = new QueueSubjectListenerBuilder('queueName', null, {name:'test', subject: 'test'},{name:'test2', subject: 'test2'})
+   t.is(builder.topics.length,2);
+
 });

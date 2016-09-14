@@ -189,13 +189,10 @@ export class QueueSubjectListener {
 
 export class QueueSubjectListenerBuilder {
 
-    set topicInfo(value) {
-        this._topicInfo = this._topicInfo || [];
-        this._topicInfo.push(value);
-    }
-
-    get topicInfo() {
-        return this._topicInfo || [];
+    constructor(queueName,logger, ...topics){
+        this.queueName = queueName;
+        this.logger = logger;
+        this.topics = topics;
     }
 
     async build() {
