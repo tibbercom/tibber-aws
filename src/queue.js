@@ -201,7 +201,7 @@ export class QueueSubjectListenerBuilder {
 
         let queue = await Queue.createQueue(this.queueName);
 
-        await Promise.all(this.topicInfo.map(async (t) => {
+        await Promise.all(this.topics.map(async (t) => {
             let topic = await Topic.createTopic(t.name, t.subject);
             await queue.subscribeTopic(topic);
         }));
