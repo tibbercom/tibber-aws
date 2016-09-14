@@ -189,7 +189,7 @@ export class QueueSubjectListener {
 
 export class QueueSubjectListenerBuilder {
 
-    set topicInfo() {
+    set topicInfo(value) {
         this._topicInfo = this._topicInfo || [];
         this._topicInfo.push(value);
     }
@@ -205,7 +205,7 @@ export class QueueSubjectListenerBuilder {
 
         let queue = await Queue.createQueue(this.queueName);
 
-        await Promise.all(this.topicInfo.map(t => {
+        await Promise.all(this.topicInfo.map(async (t) => {
             let topic = await Topic.createTopic(t.name, t.subject);
             await queue.subscribeTopic(topic);
         }));
