@@ -1,6 +1,5 @@
 import AWS from 'aws-bluebird';
 
-
 export class S3Bucket {
 
     constructor(bucket) {
@@ -54,6 +53,10 @@ export class S3Bucket {
 
     async getObject(key){
         return await this._s3.getObject({Bucket:this.name, Key: key});
+    }
+
+    getObjectAsStream(key){
+        return this._s3.getObject({Bucket:this.name, Key: key});
     }
 
 }

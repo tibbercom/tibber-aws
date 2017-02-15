@@ -50,8 +50,15 @@ test('should be able to retrieve object', async (t) => {
     t.pass();
 });
 
-test('should be able to assign several topics to builder',(t) =>{
+test('should be able to retrieve object as stream', async (t) => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    var buffer = new Buffer([ 8, 6, 7, 5, 3, 0, 9]);
+    await bucket.putObject('test', buffer, 'image/png');
+    const result = bucket.getObjectAsStream('test');
+    t.truthy(result.createReadStream);    
+});
 
+test('should be able to assign several topics to builder',(t) =>{
    let builder = new QueueSubjectListenerBuilder('test-queueName', null, {name:'test', subject: 'test'},{name:'test2', subject: 'test2'})
    t.is(builder.topics.length,2);
 });
