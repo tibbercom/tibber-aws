@@ -62,3 +62,15 @@ test('should be able to assign several topics to builder',(t) =>{
    let builder = new QueueSubjectListenerBuilder('test-queueName', null, {name:'test', subject: 'test'},{name:'test2', subject: 'test2'})
    t.is(builder.topics.length,2);
 });
+
+/*test.only('should be able to assign several topics to builder', async (t) =>{
+   
+   try{
+       let result = await Promise.all([new Promise((resolve,reject)=> reject('Go fuck yourself')),new Promise((resolve,reject)=>{console.log('ran');resolve("sweet");})]);       
+       console.log(result);
+   }
+   catch(err){
+       console.log(err);
+   }
+
+});*/

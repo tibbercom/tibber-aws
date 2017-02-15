@@ -1,5 +1,5 @@
 import AWS from 'aws-bluebird';
-import {Topic} from './topic';
+import { Topic } from './topic';
 
 let policyTemplate = {
     "Version": "2012-10-17",
@@ -112,11 +112,11 @@ class LoggerWrapper {
 
 export class QueueSubjectListener {
 
-    constructor(queue, logger) {
+    constructor(queue, logger, options = { maxConcurrentMessage: 1, waitTimeSeconds: 10 }) {
         this.queue = queue;
         this.defaultParams = {
-            MaxNumberOfMessages: 1,
-            WaitTimeSeconds: 10
+            MaxNumberOfMessages: options.maxConcurrentMessage,
+            WaitTimeSeconds: options.waitTimeSeconds
         };
         this._logger = new LoggerWrapper(logger);
 
@@ -174,7 +174,6 @@ export class QueueSubjectListener {
                     }
                     await self.queue.deleteMessage(m.handle);
                     self._logger.info('Message deleted');
-
                 }));
             }
             catch (err) {
@@ -188,7 +187,7 @@ export class QueueSubjectListener {
 }
 
 export class QueueSubjectListenerBuilder {
-    constructor(queueName,logger, ...topics){
+    constructor(queueName, logger, ...topics) {
         this.queueName = queueName;
         this.logger = logger;
         this.topics = topics;

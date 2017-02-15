@@ -14,12 +14,12 @@ export class Topic {
         return new Topic(topicResponse.TopicArn, subjectName);
     }
 
-    async push(evt) {
+    async push(evt, subject) {
 
         let message = JSON.stringify(evt);
         let payload = {
             TopicArn: this.topicArn,
-            Subject: this.subject,
+            Subject: subject || this.subject,
             Message: JSON.stringify(evt)
         };
         return await this.sns.publish(payload);
