@@ -2,16 +2,17 @@ import AWS from 'aws-bluebird';
 
 export class Topic {
 
-    constructor(topicArn, subject) {
+    constructor(topicArn, subject, name) {
         this.sns = new AWS.SNS();
         this.topicArn = topicArn;
-        this.subject = subject
+        this.subject = subject;
+        this.name = name;
     }
 
     static async createTopic(topicName, subjectName) {
         const sns = new AWS.SNS();
         const topicResponse = await sns.createTopic({ Name: topicName });
-        return new Topic(topicResponse.TopicArn, subjectName);
+        return new Topic(topicResponse.TopicArn, subjectName, topicName);
     }
 
     async push(evt, subject) {
