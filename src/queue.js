@@ -23,11 +23,19 @@ export class Queue {
         this.queueArn = queueArn;
         this.sqs = new AWS.SQS();
         this.sns = new AWS.SNS();
+        this._arnMap = {};
     }
 
     async subscribeTopic(topic) {
 
         const self = this;
+
+        if (this._arnMap[topic.topicArn]) {
+            return;
+        }
+
+        this._arnMap[topic.topicArn] = true;
+
         const subFunc = async function () {
             const params = {
                 Protocol: 'sqs',
@@ -70,6 +78,7 @@ export class Queue {
         await this.sqs.setQueueAttributes({ QueueUrl: this.queueUrl, Attributes: { 'Policy': JSON.stringify(policy) } });
 
         await subFunc();
+
 
     }
 
