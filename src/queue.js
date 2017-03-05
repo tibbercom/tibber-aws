@@ -76,10 +76,16 @@ export class Queue {
         }
         sourceArns.push(topic.topicArn);
         await this.sqs.setQueueAttributes({ QueueUrl: this.queueUrl, Attributes: { 'Policy': JSON.stringify(policy) } });
-
         await subFunc();
+    }
 
-
+    async send(subject, message, delaySeconds = 0) {
+        const payload = {
+            MessageBody: JSON.stringify({ Subject: subject, Message: JSON.stringify(message)}),
+            QueueUrl: this.queueUrl,
+            DelaySeconds: delaySeconds
+        }
+        return await this.sqs.sendMessage(payload);
     }
 
     static async createQueue(queueName) {
@@ -87,7 +93,6 @@ export class Queue {
         const queue = await sqs.createQueue({ QueueName: queueName });
         const response = await sqs.getQueueAttributes({ QueueUrl: queue.QueueUrl, AttributeNames: ['QueueArn', 'Policy'] });
         return new Queue(queue.QueueUrl, response.Attributes.QueueArn);
-
     }
     async receiveMessage(params) {
         params.QueueUrl = this.queueUrl;
