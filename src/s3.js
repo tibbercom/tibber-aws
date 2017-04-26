@@ -55,7 +55,7 @@ export class S3Bucket {
         return await this._s3.getObject({ Bucket: this.name, Key: key });
     }
 
-    async getObjectAsStream(key) {        
+    getObjectAsStream(key) {        
         return this._s3.getObject({ Bucket: this.name, Key: key });
     }
 
