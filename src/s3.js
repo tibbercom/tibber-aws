@@ -51,12 +51,29 @@ export class S3Bucket {
         return await this._s3.putObject({ Bucket: this.name, Key: key, Body: body, ContentType: contentType });
     }
 
-    async getObject(key){
-        return await this._s3.getObject({Bucket:this.name, Key: key});
+    async getObject(key) {
+        return await this._s3.getObject({ Bucket: this.name, Key: key });
     }
 
-    getObjectAsStream(key){
-        return this._s3.getObject({Bucket:this.name, Key: key});
+    async getObjectAsStream(key) {        
+        return this._s3.getObject({ Bucket: this.name, Key: key });
+    }
+
+    async getObjectStream(key){
+        if (!(await this.objectAvailable(key))){
+            throw new Error('Object not available');
+        }
+        return this._s3.getObject({ Bucket: this.name, Key: key }).createReadStream();
+    }    
+
+    async objectAvailable(key) {
+        try {
+            const head = await this._s3.headObject({ Bucket: this.name, Key: key });            
+            return true;
+        }
+        catch (err) {            
+            return false;
+        }
     }
 
 }
