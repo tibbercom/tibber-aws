@@ -16,8 +16,6 @@ export class Topic {
     }
 
     async push(evt, subject) {
-
-        let message = JSON.stringify(evt);
         let payload = {
             TopicArn: this.topicArn,
             Subject: subject || this.subject,
