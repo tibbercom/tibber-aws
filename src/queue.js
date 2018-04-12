@@ -156,7 +156,7 @@ export class QueueSubjectListener {
 
                 const currentParams = Object.assign({}, params, { MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight });
 
-                let response = await self.queue.receiveMessage(params);
+                let response = await self.queue.receiveMessage(currentParams);
                 if (!response.Messages || response.Messages.length == 0) {
                     setTimeout(handlerFunc, 2000);
                     return;
