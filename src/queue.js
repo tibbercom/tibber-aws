@@ -154,7 +154,7 @@ export class QueueSubjectListener {
         let handlerFunc = async function () {
             try {
 
-                const currentParams = { ...params, MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight };
+                const currentParams = Object.assign({}, params, { MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight });
 
                 let response = await self.queue.receiveMessage(params);
                 if (!response.Messages || response.Messages.length == 0) {
