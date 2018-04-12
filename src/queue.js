@@ -81,7 +81,7 @@ export class Queue {
 
     async send(subject, message, delaySeconds = 0) {
         const payload = {
-            MessageBody: JSON.stringify({ Subject: subject, Message: JSON.stringify(message)}),
+            MessageBody: JSON.stringify({ Subject: subject, Message: JSON.stringify(message) }),
             QueueUrl: this.queueUrl,
             DelaySeconds: delaySeconds
         }
@@ -149,15 +149,19 @@ export class QueueSubjectListener {
 
         let self = this;
 
+        let cntInFlight = 0;
+
         let handlerFunc = async function () {
             try {
+
+                const currentParams = { ...params, MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight };
 
                 let response = await self.queue.receiveMessage(params);
                 if (!response.Messages || response.Messages.length == 0) {
                     setTimeout(handlerFunc, 2000);
                     return;
                 }
-                await Promise.all(response.Messages.map(m => {
+                const messages = response.Messages.map(m => {
                     let json = JSON.parse(m.Body);
 
                     try {
@@ -173,7 +177,11 @@ export class QueueSubjectListener {
                         self._logger.error('Not able to parse event as json');
                         return { handle: m.ReceiptHandle, message: { subject: "Delete Me" } }
                     }
-                }).map(async (m) => {
+                });
+
+                cntInFlight += messages.length;
+
+                await Promise.race(messages.map(async m => {
 
                     if (self.handlers[m.message.subject] || self.handlers["*"]) {
 
@@ -187,13 +195,17 @@ export class QueueSubjectListener {
                         }));
                     }
                     await self.queue.deleteMessage(m.handle);
+                    cntInFlight--;
                     self._logger.info('Message deleted');
                 }));
+
+                setTimeout(handlerFunc, 10);
+
             }
             catch (err) {
                 self._logger.error(err);
             }
-            setTimeout(handlerFunc, 100);
+
         };
         setTimeout(handlerFunc, 10);
     }
