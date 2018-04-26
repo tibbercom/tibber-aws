@@ -2,10 +2,12 @@ import AWS from 'aws-sdk';
 import AWSXRay from 'aws-xray-sdk';
 import { getContainterMetadataSync } from './container-info';
 import os from 'os';
+import http from 'http';
 
 let xRayInitialized = false;
 
 export const xRayInitialize = ({ samplingRules, deamonAddress }) => {
+    AWSXRay.captureHTTPsGlobal(http);
     AWSXRay.captureAWS(AWS);
     AWSXRay.middleware.setSamplingRules(samplingRules);
     AWSXRay.setDaemonAddress(deamonAddress);    
