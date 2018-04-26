@@ -7,7 +7,7 @@ export const getContainterMetadata = async () => {
         err ? reject(err) : resolve(JSON.parse(data))));
 }
 
-export const getContainterMetadataSync = async () => {
+export const getContainterMetadataSync = () => {
     if (!process.env.ECS_CONTAINER_METADATA_FILE) return undefined;
     return JSON.parse(fs.readFileSync(process.env.ECS_CONTAINER_METADATA_FILE, 'utf8'));
 }
