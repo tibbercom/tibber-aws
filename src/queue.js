@@ -1,4 +1,4 @@
-import AWS from 'aws-bluebird';
+import AWS from 'aws-sdk';
 import { Topic } from './topic';
 
 let policyTemplate = {
@@ -13,8 +13,6 @@ let policyTemplate = {
     }
     ]
 };
-
-
 
 export class Queue {
 
@@ -42,13 +40,13 @@ export class Queue {
                 TopicArn: topic.topicArn,
                 Endpoint: self.queueArn
             };
-            return await self.sns.subscribe(params);
+            return await self.sns.subscribe(params).promise();
         }
 
         let response = await this.sqs.getQueueAttributes({
             QueueUrl: this.queueUrl,
             AttributeNames: ['All']
-        });
+        }).promise();
 
         let policy = policyTemplate;
 
@@ -75,7 +73,7 @@ export class Queue {
             return;
         }
         sourceArns.push(topic.topicArn);
-        await this.sqs.setQueueAttributes({ QueueUrl: this.queueUrl, Attributes: { 'Policy': JSON.stringify(policy) } });
+        await this.sqs.setQueueAttributes({ QueueUrl: this.queueUrl, Attributes: { 'Policy': JSON.stringify(policy) } }).promise();
         await subFunc();
     }
 
@@ -85,23 +83,23 @@ export class Queue {
             QueueUrl: this.queueUrl,
             DelaySeconds: delaySeconds
         }
-        return await this.sqs.sendMessage(payload);
+        return await this.sqs.sendMessage(payload).promise();
     }
 
     static async createQueue(queueName) {
         const sqs = new AWS.SQS();
-        const queue = await sqs.createQueue({ QueueName: queueName });
-        const response = await sqs.getQueueAttributes({ QueueUrl: queue.QueueUrl, AttributeNames: ['QueueArn', 'Policy'] });
+        const queue = await sqs.createQueue({ QueueName: queueName }).promise();
+        const response = await sqs.getQueueAttributes({ QueueUrl: queue.QueueUrl, AttributeNames: ['QueueArn', 'Policy'] }).promise();
         return new Queue(queue.QueueUrl, response.Attributes.QueueArn);
     }
     async receiveMessage(params) {
         params.QueueUrl = this.queueUrl;
-        return await this.sqs.receiveMessage(params);
+        return await this.sqs.receiveMessage(params).promise();
     }
 
     async deleteMessage(receiptHandle) {
         let props = { QueueUrl: this.queueUrl, ReceiptHandle: receiptHandle };
-        const response = await this.sqs.deleteMessage(props);
+        const response = await this.sqs.deleteMessage(props).promise();
     }
 }
 
@@ -136,6 +134,10 @@ export class QueueSubjectListener {
 
     }
 
+    stop() {
+        this.isStopped = true;
+    }
+
     onSubject(subjectName, handler) {
 
         this.handlers = this.handlers || {};
@@ -153,6 +155,8 @@ export class QueueSubjectListener {
 
         let handlerFunc = async function () {
             try {
+
+                if (this.isStopped === true) return;
 
                 const currentParams = Object.assign({}, params, { MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight });
 
@@ -209,7 +213,6 @@ export class QueueSubjectListener {
         };
         setTimeout(handlerFunc, 10);
     }
-
 }
 
 export class QueueSubjectListenerBuilder {

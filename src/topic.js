@@ -1,4 +1,4 @@
-import AWS from 'aws-bluebird';
+import AWS from 'aws-sdk';
 
 export class Topic {
 
@@ -11,7 +11,7 @@ export class Topic {
 
     static async createTopic(topicName, subjectName) {
         const sns = new AWS.SNS();
-        const topicResponse = await sns.createTopic({ Name: topicName });
+        const topicResponse = await sns.createTopic({ Name: topicName }).promise();
         return new Topic(topicResponse.TopicArn, subjectName, topicName);
     }
 
@@ -21,6 +21,6 @@ export class Topic {
             Subject: subject || this.subject,
             Message: JSON.stringify(evt)
         };
-        return await this.sns.publish(payload);
+        return await this.sns.publish(payload).promise();
     }
 }
