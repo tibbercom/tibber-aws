@@ -1,6 +1,6 @@
 try {
-    import path from 'path';
-    import fs from 'fs';
+    const path = require('path');
+    const fs = require('fs');    
     const file = path.join(__dirname, '..', 'aws-xray-sdk-core', 'lib', 'context_utils.js');
     let txt = fs.readFileSync(file, 'utf8');
     txt = txt.replace("require('continuation-local-storage')", "require('cls-hooked')");
