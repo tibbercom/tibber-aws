@@ -1,6 +1,6 @@
 {
   "name": "tibber-aws",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "",
   "main": "./lib/index.js",
   "scripts": {
@@ -32,6 +32,7 @@
   "dependencies": {
     "aws-sdk": "^2.229.1",
     "aws-xray-sdk": "^1.2.0",
-    "babel-register": "^6.11.6"
+    "babel-register": "^6.11.6",
+    "cls-hooked": "^4.2.2"
   }
 }

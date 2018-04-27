@@ -1,3 +1,17 @@
+try {
+    import path from 'path';
+    import fs from 'fs';
+    const file = path.join(__dirname, '..', 'aws-xray-sdk-core', 'lib', 'context_utils.js');
+    let txt = fs.readFileSync(file, 'utf8');
+    txt = txt.replace("require('continuation-local-storage')", "require('cls-hooked')");
+
+    fs.writeFileSync(file, txt, 'utf8');
+}
+catch(error){
+    console.error('error while monkey patching x-ray-stuff');
+}
+
+
 import AWS from 'aws-sdk';
 import AWSXRay from 'aws-xray-sdk';
 import { getContainterMetadataSync } from './container-info';
@@ -15,14 +29,12 @@ export const xRayInitialize = ({ samplingRules, deamonAddress }) => {
 
     AWSXRay.setDaemonAddress(deamonAddress);
     AWSXRay.captureHTTPsGlobal(http);
-    AWSXRay.captureAWS(AWS);    
+    AWSXRay.captureAWS(AWS);
 
     if (process.env.ECS_CONTAINER_METADATA_FILE) {
         AWSXRay.config([AWSXRay.plugins.ECSPlugin]);
     }
     xRayInitialized = true;
-
-    console.log('init done');
 }
 
 export const xRayOpenExpressMiddleware = (appName) => {
@@ -30,7 +42,7 @@ export const xRayOpenExpressMiddleware = (appName) => {
     const segmentName = `${appName}@${contatinerMetadata ? contatinerMetadata.ContainerID.substring(0, 12) : os.hostname()}`;
     const middleware = AWSXRay.express.openSegment(segmentName);
     AWSXRay.middleware.setSamplingRules(configuredSamplingRules);
-    console.log('sampling rules set', configuredSamplingRules);
+
     return middleware;
 }
 
