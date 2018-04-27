@@ -1,17 +1,3 @@
-try {
-    const path = require('path');
-    const fs = require('fs');    
-    const file = path.join(__dirname, '..', 'aws-xray-sdk-core', 'lib', 'context_utils.js');
-    let txt = fs.readFileSync(file, 'utf8');
-    txt = txt.replace("require('continuation-local-storage')", "require('cls-hooked')");
-
-    fs.writeFileSync(file, txt, 'utf8');
-}
-catch(error){
-    console.error('error while monkey patching x-ray-stuff');
-}
-
-
 import AWS from 'aws-sdk';
 import AWSXRay from 'aws-xray-sdk';
 import { getContainterMetadataSync } from './container-info';
