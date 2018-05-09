@@ -124,11 +124,12 @@ class LoggerWrapper {
 
 export class QueueSubjectListener {
 
-    constructor(queue, logger, options = { maxConcurrentMessage: 1, waitTimeSeconds: 10 }) {
+    constructor(queue, logger, options = { maxConcurrentMessage: 1, waitTimeSeconds: 10, visibilityTimeout:30 }) {
         this.queue = queue;
         this.defaultParams = {
             MaxNumberOfMessages: options.maxConcurrentMessage,
-            WaitTimeSeconds: options.waitTimeSeconds
+            WaitTimeSeconds: options.waitTimeSeconds,
+            VisibilityTimeout: options.visibilityTimeout
         };
         this._logger = new LoggerWrapper(logger);
 
