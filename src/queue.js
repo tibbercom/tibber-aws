@@ -124,12 +124,13 @@ class LoggerWrapper {
 
 export class QueueSubjectListener {
 
-    constructor(queue, logger, options = { maxConcurrentMessage: 1, waitTimeSeconds: 10, visibilityTimeout:30 }) {
+    constructor(queue, logger, options = { maxConcurrentMessage: 1, waitTimeSeconds: 10, visibilityTimeout: 30 }) {
         this.queue = queue;
         this.defaultParams = {
             MaxNumberOfMessages: options.maxConcurrentMessage,
             WaitTimeSeconds: options.waitTimeSeconds,
-            VisibilityTimeout: options.visibilityTimeout
+            VisibilityTimeout: options.visibilityTimeout,
+            receiveTimeout: options.receiveTimeout
         };
         this._logger = new LoggerWrapper(logger);
 
@@ -148,8 +149,7 @@ export class QueueSubjectListener {
 
     listen(params) {
 
-        params = params || this.defaultParams;
-
+        params = Object.assign({}, this.defaultParams, params);
         let self = this;
 
         let cntInFlight = 0;
@@ -159,11 +159,12 @@ export class QueueSubjectListener {
 
                 if (this.isStopped === true) return;
 
-                const currentParams = Object.assign({}, params, { MaxNumberOfMessages: params.MaxNumberOfMessages - cntInFlight });
+                const { MaxNumberOfMessages, WaitTimeSeconds, VisibilityTimeout } = params;
+                const currentParams = { MaxNumberOfMessages: MaxNumberOfMessages - cntInFlight, WaitTimeSeconds, VisibilityTimeout };
 
                 let response = await self.queue.receiveMessage(currentParams);
                 if (!response.Messages || response.Messages.length == 0) {
-                    setTimeout(handlerFunc, 2000);
+                    setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 2000);
                     return;
                 }
                 const messages = response.Messages.map(m => {
@@ -204,7 +205,7 @@ export class QueueSubjectListener {
                     self._logger.info('Message deleted');
                 }));
 
-                setTimeout(handlerFunc, 10);
+                setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
 
             }
             catch (err) {
@@ -212,7 +213,7 @@ export class QueueSubjectListener {
             }
 
         };
-        setTimeout(handlerFunc, 10);
+        setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
     }
 }
 
