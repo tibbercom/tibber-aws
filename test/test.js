@@ -1,9 +1,10 @@
 import test from 'ava';
-import { S3Bucket, QueueSubjectListenerBuilder, Queue, configure } from '../src/index';
+import { S3Bucket, QueueSubjectListenerBuilder, Queue, configure, getSecret } from '../src/index';
 import rand from 'randomstring';
 import { Readable } from 'stream';
 
-configure({region: 'eu-west-1'});
+
+configure({ region: 'eu-west-1' });
 
 const testBucketName = 'tibber-tibber-ftw-123321';
 
@@ -62,19 +63,19 @@ test('should be able to retrieve object as stream 2', async (t) => {
     const bucket = await S3Bucket.getBucket(testBucketName);
     var buffer = new Buffer([8, 6, 7, 5, 3, 0, 9]);
     await bucket.putObject('test', buffer, 'image/png');
-    const result = await bucket.getObjectStream('test');    
+    const result = await bucket.getObjectStream('test');
     t.true(result instanceof Readable);
 });
 
 test('should be able to handle missing key exception', async (t) => {
     const bucket = await S3Bucket.getBucket(testBucketName);
     let name = rand.generate();
-    
+
     try {
         const result = await bucket.getObjectStream(name);
     }
     catch (error) {
-        t.is(error.message,'Object not available');        
+        t.is(error.message, 'Object not available');
     }
 });
 
@@ -101,6 +102,13 @@ test('should be able to check wheter object is available in S3', async t => {
 });
 
 /* 
+test.only('getSecret', t=>{
+
+   console.log(getSecret('asdfa', 'connectionStringNodeJs'));
+
+})
+
+
 test.only('should be able to send message to queue', async t => {
 
     const queue = await Queue.createQueue('test-tibber-aws-queue');
