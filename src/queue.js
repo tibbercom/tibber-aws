@@ -196,7 +196,7 @@ export class QueueSubjectListener {
                                 await h(m.message.message, m.message.subject);
                             }
                             catch (error) {
-                                self._logger.log(error);
+                                self._logger.error(error);
                             }
                         }));
                     }
