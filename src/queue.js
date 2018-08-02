@@ -109,12 +109,12 @@ class LoggerWrapper {
         this._logger = logger || {};
     }
 
-    log(message) {
-        this._logger.log ? this._logger.log(message) : console.log(message);
+    log(level, message) {
+        this._logger.log && this._logger.log(level, message);
     }
 
     info(message) {
-        this._logger.info ? this._logger.info(message) : console.log(message);
+        this._logger.info && this._logger.info(message);
     }
 
     error(message) {
@@ -202,7 +202,7 @@ export class QueueSubjectListener {
                     }
                     await self.queue.deleteMessage(m.handle);
                     cntInFlight--;
-                    self._logger.info('Message deleted');
+                    self._logger.debug(`Message with subject "${m.message.subject}" deleted`);
                 }));
 
                 setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
