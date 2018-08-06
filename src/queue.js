@@ -113,6 +113,10 @@ class LoggerWrapper {
         this._logger.log && this._logger.log(level, message);
     }
 
+    debug(message) {
+        this._logger.debug && this._logger.debug(message);
+    }
+
     info(message) {
         this._logger.info && this._logger.info(message);
     }
