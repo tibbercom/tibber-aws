@@ -1,5 +1,5 @@
 import test from 'ava';
-import { S3Bucket, QueueSubjectListenerBuilder, Queue, configure, getSecret } from '../src/index';
+import { S3Bucket, QueueSubjectListenerBuilder, Queue, configure, getSecret, getLambdaFunc } from '../src/index';
 import rand from 'randomstring';
 import { Readable } from 'stream';
 
@@ -102,6 +102,17 @@ test('should be able to check wheter object is available in S3', async t => {
 });
 
 /* 
+test.only('run lambda func', async t => {
+
+    configure({ region: 'eu-west-1' });
+    const func = getLambdaFunc('pyml_fit_forecast_model_single_home');
+
+    await func({ homeId: 'bc4cf5b9-4f35-4ce3-83ad-dfe6906e97ba' });
+
+
+});
+
+
 test.only('getSecret', t=>{
 
    console.log(getSecret('asdfa', 'connectionStringNodeJs'));
