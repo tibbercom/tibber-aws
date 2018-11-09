@@ -3,7 +3,6 @@ import { S3Bucket, QueueSubjectListenerBuilder, Queue, configure, getSecret, get
 import rand from 'randomstring';
 import { Readable } from 'stream';
 
-
 configure({ region: 'eu-west-1' });
 
 const testBucketName = 'tibber-tibber-ftw-123321';
@@ -105,12 +104,20 @@ test('should be able to check wheter object is available in S3', async t => {
 test.only('run lambda func', async t => {
 
     configure({ region: 'eu-west-1' });
-    const func = getLambdaFunc('pyml_fit_forecast_model_single_home');
+    /* const func = getLambdaFunc('pyml_fit_forecast_model_single_home');
 
-    await func({ homeId: 'bc4cf5b9-4f35-4ce3-83ad-dfe6906e97ba' });
+    await func({ homeId: 'bc4cf5b9-4f35-4ce3-83ad-dfe6906e97ba' }); 
 
+    const lambda = getLambdaFunc('pyml_predict_forecast_single_home');
+    const startTime = moment.tz('Europe/Oslo').startOf('day').add(1, 'day');
+    const endTime = moment.tz('Europe/Oslo').startOf('day').add(2, 'day');
+    const modelType = 'consumption';
+    const result = await lambda({ homeId: '14b024f9-1c7f-4b2f-9fc6-6e2b3921d201', startTime, endTime, modelType });
 
+    console.log(result);
 });
+
+
 
 
 test.only('getSecret', t=>{
