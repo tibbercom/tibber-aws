@@ -153,7 +153,7 @@ export class QueueSubjectListener {
 
     listen(params) {
 
-        const { MaxNumberOfMessages, WaitTimeSeconds, VisibilityTimeout } = Object.assign({}, this.defaultParams, params);
+        const { MaxNumberOfMessages, WaitTimeSeconds, VisibilityTimeout, receiveTimeout } = Object.assign({}, this.defaultParams, params);
         let self = this;
 
         let cntInFlight = 0;
@@ -166,7 +166,7 @@ export class QueueSubjectListener {
 
                 let response = await self.queue.receiveMessage(currentParams);
                 if (!response.Messages || response.Messages.length == 0) {
-                    setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 2000);
+                    setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 2000);
                     return;
                 }
                 const messages = response.Messages.map(m => {
@@ -218,7 +218,7 @@ export class QueueSubjectListener {
                     await Promise.race(promises);
                 }
 
-                setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
+                setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
 
             }
             catch (err) {
@@ -226,7 +226,7 @@ export class QueueSubjectListener {
             }
 
         };
-        setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
+        setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
     }
 }
 
