@@ -153,7 +153,7 @@ export class QueueSubjectListener {
 
     listen(params) {
 
-        params = Object.assign({}, this.defaultParams, params);
+        const { MaxNumberOfMessages, WaitTimeSeconds, VisibilityTimeout } = Object.assign({}, this.defaultParams, params);
         let self = this;
 
         let cntInFlight = 0;
@@ -162,8 +162,6 @@ export class QueueSubjectListener {
             try {
 
                 if (this.isStopped === true) return;
-
-                const { MaxNumberOfMessages, WaitTimeSeconds, VisibilityTimeout } = params;
                 const currentParams = { MaxNumberOfMessages: MaxNumberOfMessages - cntInFlight, WaitTimeSeconds, VisibilityTimeout };
 
                 let response = await self.queue.receiveMessage(currentParams);
@@ -191,23 +189,34 @@ export class QueueSubjectListener {
 
                 cntInFlight += messages.length;
 
-                await Promise.race(messages.map(async m => {
+                const promises = messages.map(async m => {
 
-                    if (self.handlers[m.message.subject] || self.handlers["*"]) {
+                    try {
+                        if (self.handlers[m.message.subject] || self.handlers["*"]) {
 
-                        await Promise.all((self.handlers[m.message.subject] || []).concat(self.handlers["*"] || []).map(async (h) => {
-                            try {
-                                await h(m.message.message, m.message.subject);
-                            }
-                            catch (error) {
-                                self._logger.error(error);
-                            }
-                        }));
+                            await Promise.all((self.handlers[m.message.subject] || []).concat(self.handlers["*"] || []).map(async (h) => {
+                                try {
+                                    await h(m.message.message, m.message.subject);
+                                }
+                                catch (error) {
+                                    self._logger.error(error);
+                                }
+                            }));
+                        }
+                        await self.queue.deleteMessage(m.handle);
+                        self._logger.debug(`Message with subject "${m.message.subject}" deleted`);
                     }
-                    await self.queue.deleteMessage(m.handle);
-                    cntInFlight--;
-                    self._logger.debug(`Message with subject "${m.message.subject}" deleted`);
-                }));
+                    catch (error) {
+                        self._logger.error(error);
+                    }
+                    finally {
+                        cntInFlight--;
+                    }
+                });
+
+                if (MaxNumberOfMessages == cntInFlight) {
+                    await Promise.race(promises);
+                }
 
                 setTimeout(handlerFunc, (params.receiveTimeout && params.receiveTimeout()) || 10);
 
