@@ -221,9 +221,7 @@ export class QueueSubjectListener {
             catch (err) {
                 self._logger.error(err);
             }
-            finally {
-                setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
-            }
+            setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
         };
         setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
     }
