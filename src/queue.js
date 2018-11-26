@@ -217,14 +217,13 @@ export class QueueSubjectListener {
                 if (MaxNumberOfMessages == cntInFlight) {
                     await Promise.race(promises);
                 }
-
-                setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
-
             }
             catch (err) {
                 self._logger.error(err);
             }
-
+            finally {
+                setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
+            }
         };
         setTimeout(handlerFunc, (receiveTimeout && receiveTimeout()) || 10);
     }
