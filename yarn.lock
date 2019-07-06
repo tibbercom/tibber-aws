@@ -183,6 +183,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+atomic-batcher@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/atomic-batcher/-/atomic-batcher-1.0.2.tgz#d16901d10ccec59516c197b9ccd8930689b813b4"
+  integrity sha1-0WkB0QzOxZUWwZe5zNiTBom4E7Q=
+
 ava-init@^0.1.0:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/ava-init/-/ava-init-0.1.6.tgz#ef19ed0b24b6bf359dad6fbadf1a05d836395c91"
@@ -272,9 +277,10 @@ ava@^0.15.2:
   optionalDependencies:
     chokidar "^1.4.2"
 
-aws-sdk@^2.229.1:
-  version "2.229.1"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.229.1.tgz#6123c8acee0de534a0585e1375ee19c4de54a39e"
+aws-sdk@^2.304.0, aws-sdk@^2.488.0:
+  version "2.488.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.488.0.tgz#1664e14743d93793d2ffc4b2e70b7ce19c008d84"
+  integrity sha512-9AP48tyF1E5+x1CKeiRlj0Sv1YF7KI0BdSW9JP8x3ClhPWNUHjDYNH2OwsALuG1BloeY2ZigYqfI2fB7g3rNHQ==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -283,9 +289,8 @@ aws-sdk@^2.229.1:
     querystring "0.2.0"
     sax "1.2.1"
     url "0.10.3"
-    uuid "3.1.0"
-    xml2js "0.4.17"
-    xmlbuilder "4.2.1"
+    uuid "3.3.2"
+    xml2js "0.4.19"
 
 aws-sign2@~0.6.0:
   version "0.6.0"
@@ -295,37 +300,44 @@ aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
 
-aws-xray-sdk-core@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aws-xray-sdk-core/-/aws-xray-sdk-core-1.2.0.tgz#28c6e5397fd5c0fa66365d5bd6f58b9d551d4e22"
+aws-xray-sdk-core@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/aws-xray-sdk-core/-/aws-xray-sdk-core-2.3.3.tgz#fa8e103ff25526da6d66e5f942947a06fba069a4"
+  integrity sha512-4zcItAzHRr7QJ15y168tMTdwoa87YoiyHntPYmnIMoiPYT8kphZ++pN182+rCi+NBS1ySk5qG3vVJfJUjvL7OA==
   dependencies:
+    atomic-batcher "^1.0.2"
+    aws-sdk "^2.304.0"
     continuation-local-storage "^3.2.0"
-    moment "^2.15.2"
+    date-fns "^1.29.0"
+    lodash "^4.17.11"
     pkginfo "^0.4.0"
     semver "^5.3.0"
-    underscore "^1.8.3"
-    winston "^2.2.0"
+    winston "^2.4.4"
 
-aws-xray-sdk-express@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aws-xray-sdk-express/-/aws-xray-sdk-express-1.2.0.tgz#8bf3529089ddb47b2736314576970d4c689f3f31"
+aws-xray-sdk-express@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/aws-xray-sdk-express/-/aws-xray-sdk-express-2.3.3.tgz#5fd71f054c2536952570b49ffcb2705500f23e67"
+  integrity sha512-H0ss5Q3BCtdbUPRXfOONgsAMmFIbXAk80iA7sA3miAhGbmqivI88Gsubhm0Zo0yfn+XYlABGU7mG3jtqjtXMFw==
 
-aws-xray-sdk-mysql@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aws-xray-sdk-mysql/-/aws-xray-sdk-mysql-1.2.0.tgz#9f89b5c9137abadcab9f69a27cc455c7fe4fdcbd"
+aws-xray-sdk-mysql@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/aws-xray-sdk-mysql/-/aws-xray-sdk-mysql-2.3.3.tgz#1eb29e2fd7f90f1fbdba5ac9a3dcb750e905b31d"
+  integrity sha512-BBO8Z8WzYXO9CYTzxmHw5OZmsLpEw8EDXCAgkY1fNkMv99A/Fu44TzoDIJQRB/aKYSqdfa6fWvuzIbaj9nUaVw==
 
-aws-xray-sdk-postgres@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aws-xray-sdk-postgres/-/aws-xray-sdk-postgres-1.2.0.tgz#6b8342764359e823eaf5be5acefbab63ffc37c7e"
+aws-xray-sdk-postgres@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/aws-xray-sdk-postgres/-/aws-xray-sdk-postgres-2.3.3.tgz#fbb51adb84cbcb82bc5b6a934fa5dd2ade8b5aeb"
+  integrity sha512-Zm2UXzS5/ci045gsAGWSjINPNlAZ/AzszLl0vtnZNCDRIIxe8Bu/cjgXmhqQud4rbZIPyBMrNzPx6Ii6x3Xgcg==
 
-aws-xray-sdk@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aws-xray-sdk/-/aws-xray-sdk-1.2.0.tgz#ffe16a7eac8287635fa1ce40c36137276ebaf42a"
+aws-xray-sdk@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/aws-xray-sdk/-/aws-xray-sdk-2.3.3.tgz#ea9346a0368c07e0d92e4a92976fd80833e19e84"
+  integrity sha512-BXvZy9/5ir6HTdIiQRcDaAQDgkIkqoIrznai9+nngKl52NREajgSEhjBSY9aJ0v9yIvsvBimr6ZvEr0MRmkkEg==
   dependencies:
-    aws-xray-sdk-core "^1.2.0"
-    aws-xray-sdk-express "^1.2.0"
-    aws-xray-sdk-mysql "^1.2.0"
-    aws-xray-sdk-postgres "^1.2.0"
+    aws-xray-sdk-core "^2.3.3"
+    aws-xray-sdk-express "^2.3.3"
+    aws-xray-sdk-mysql "^2.3.3"
+    aws-xray-sdk-postgres "^2.3.3"
     pkginfo "^0.4.0"
 
 aws4@^1.2.1, aws4@^1.6.0:
@@ -1344,6 +1356,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-fns@^1.29.0:
+  version "1.30.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
+  integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
+
 date-time@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/date-time/-/date-time-0.1.1.tgz#ed2f6d93d9790ce2fd66d5b5ff3edd5bbcbf3b07"
@@ -2269,9 +2286,14 @@ lodash.padstart@^4.1.0:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/lodash.padstart/-/lodash.padstart-4.6.1.tgz#d2e3eebff0d9d39ad50f5cbd1b52a7bce6bb611b"
 
-lodash@^4.0.0, lodash@^4.14.0, lodash@^4.17.4:
+lodash@^4.14.0, lodash@^4.17.4:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+
+lodash@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+  integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
 loose-envify@^1.0.0:
   version "1.3.1"
@@ -2403,10 +2425,6 @@ minizlib@^1.1.0:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
-
-moment@^2.15.2:
-  version "2.22.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
 ms@2.0.0:
   version "2.0.0"
@@ -3701,10 +3719,6 @@ umask@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/umask/-/umask-1.1.0.tgz#f29cebf01df517912bb58ff9c4e50fde8e33320d"
 
-underscore@^1.8.3:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.0.tgz#31dbb314cfcc88f169cd3692d9149d81a00a73e4"
-
 unique-temp-dir@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unique-temp-dir/-/unique-temp-dir-1.0.0.tgz#6dce95b2681ca003eebfb304a415f9cbabcc5385"
@@ -3755,9 +3769,10 @@ util-extend@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/util-extend/-/util-extend-1.0.3.tgz#a7c216d267545169637b3b6edc6ca9119e2ff93f"
 
-uuid@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
+uuid@3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+  integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
 uuid@^2.0.1:
   version "2.0.3"
@@ -3830,9 +3845,10 @@ widest-line@^1.0.0:
   dependencies:
     string-width "^1.0.1"
 
-winston@^2.2.0:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/winston/-/winston-2.4.2.tgz#3ca01f763116fc48db61053b7544e750431f8db0"
+winston@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/winston/-/winston-2.4.4.tgz#a01e4d1d0a103cf4eada6fc1f886b3110d71c34b"
+  integrity sha512-NBo2Pepn4hK4V01UfcWcDlmiVTs7VTB1h7bgnB0rgP146bYhMxX0ypCz3lBOfNxCO4Zuek7yeT+y/zM1OfMw4Q==
   dependencies:
     async "~1.0.0"
     colors "1.0.x"
@@ -3885,18 +3901,18 @@ xdg-basedir@^2.0.0:
   dependencies:
     os-homedir "^1.0.0"
 
-xml2js@0.4.17:
-  version "0.4.17"
-  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.17.tgz#17be93eaae3f3b779359c795b419705a8817e868"
+xml2js@0.4.19:
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
+  integrity sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==
   dependencies:
     sax ">=0.6.0"
-    xmlbuilder "^4.1.0"
+    xmlbuilder "~9.0.1"
 
-xmlbuilder@4.2.1, xmlbuilder@^4.1.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-4.2.1.tgz#aa58a3041a066f90eaa16c2f5389ff19f3f461a5"
-  dependencies:
-    lodash "^4.0.0"
+xmlbuilder@~9.0.1:
+  version "9.0.7"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
+  integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"
