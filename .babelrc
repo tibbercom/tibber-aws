@@ -1,7 +1,14 @@
 {
   "presets": [
-    "node6"
+    ["env", {
+      "targets": {
+        "node": "8"
+      }
+    }]
   ],
-  "plugins": ["syntax-async-functions","transform-async-to-generator"],
-  "ignore": ["node_modules/**/*", "lib/**/*"]
+  
+  "ignore": [
+    "node_modules/**/*",
+    "lib/**/*"
+  ]
 }
