@@ -6,6 +6,7 @@
   "scripts": {
     "start": "babel-node ./samples/sample1.js",
     "build": "babel ./src -d ./lib",
+    "login": "npm-cli-login -u $NPM_USERNAME -p $NPM_PASSWORD -e $NPM_EMAIL",
     "2npm": "publish",
     "test": "ava  --verbose -s"
   },
