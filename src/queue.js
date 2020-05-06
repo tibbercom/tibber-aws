@@ -137,7 +137,7 @@ export class QueueSubjectListener {
             receiveTimeout: options.receiveTimeout
         };
         this._logger = new LoggerWrapper(logger);
-
+        this.handlers = {};
     }
 
     stop() {
@@ -145,8 +145,6 @@ export class QueueSubjectListener {
     }
 
     onSubject(subjectName, handler) {
-
-        this.handlers = this.handlers || {};
         this.handlers[subjectName] = this.handlers[subjectName] || [];
         this.handlers[subjectName].push(handler);
     }
