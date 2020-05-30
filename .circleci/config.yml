@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Deploy Package
           command: |     
-            npm install npm-cli-login
+            npm install -g npm-cli-login publish
             yarn  
             yarn build
             npm run login
