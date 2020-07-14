@@ -160,7 +160,7 @@ export class QueueSubjectListener {
             try {
 
                 if (this.isStopped === true) return;
-                const currentParams = { MaxNumberOfMessages: MaxNumberOfMessages - cntInFlight, WaitTimeSeconds, VisibilityTimeout };
+                const currentParams = { MaxNumberOfMessages: Math.min(10, MaxNumberOfMessages - cntInFlight), WaitTimeSeconds, VisibilityTimeout };
 
                 let response = await self.queue.receiveMessage(currentParams);
                 if (!response.Messages || response.Messages.length == 0) {
