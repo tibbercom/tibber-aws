@@ -1,18 +1,18 @@
 import AWS from 'aws-sdk';
 const rpc = require('sync-rpc');
-let data = undefined;
+let cache = {};
 
 export const getSecretCollection = function (secretName) {
-    if (data) return data;
+    if (cache[secretName]) return cache[secretName];
     try {
         const client = rpc(__dirname + '/syncSecrets.js');
-        data = JSON.parse(client({ region: AWS.config.region, secret: secretName }).SecretString);
+        const data = JSON.parse(client({ region: AWS.config.region, secret: secretName }).SecretString);
+        cache[secretName] = data;
+        return data;
     }
     catch (err) {
         return undefined;
     }
-
-    return data;
 }
 
 export const getSecret = function (secretName, property) {
