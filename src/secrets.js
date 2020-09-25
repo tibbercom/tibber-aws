@@ -11,6 +11,7 @@ export const getSecretCollection = function (secretName) {
         return data;
     }
     catch (err) {
+        console.log(err);
         return undefined;
     }
 }
