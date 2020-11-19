@@ -5,3 +5,4 @@ export { getContainterMetadata, getContainterMetadataSync } from './container-in
 export { configure } from './configure';
 export { getSecret, getSecretCollection } from './secrets';
 export { getLambdaFunc } from './lambda';
+export { getCurrentEc2InstanceId, getCurrentEc2InstanceNameTag } from './ec2-instance-info';
