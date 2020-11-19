@@ -13,7 +13,7 @@ export const getCurrentEc2InstanceId = () => {
 
 export const getCurrentEc2InstanceNameTag = async () => {
 
-    const instanceId = await getEc2InstanceId();
+    const instanceId = await getCurrentEc2InstanceId();
 
     const ec2  = new AWS.EC2();
     var params = {
