@@ -2,7 +2,7 @@
   "name": "tibber-aws",
   "version": "5.1.1",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/src/index.js",
   "scripts": {
     "start": "ts-node -T samples/sample1.ts",
     "test": "ava  --verbose -s",
@@ -20,7 +20,7 @@
     "cz:init": "commitizen init cz-conventional-changelog --yarn --dev --exact"
   },
   "files": [
-    "/dist"
+    "/dist/src"
   ],
   "repository": {
     "type": "git",
