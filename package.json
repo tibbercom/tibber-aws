@@ -15,9 +15,13 @@
     "posttest": "yarn run lint",
     "release": "semantic-release",
     "release:local": "run.env semantic-release",
+    "release:preview": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "cz": "git add . && cz",
     "cz:init": "commitizen init cz-conventional-changelog --yarn --dev --exact"
   },
+  "files": [
+    "/dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tibbercom/tibber-aws.git"
