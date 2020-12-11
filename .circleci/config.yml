@@ -16,7 +16,6 @@ jobs:
       - run:
           name: Deploy Package
           command: |
-            sudo npm install -g npm-cli-login publish
             yarn
             yarn compile
             yarn release
