@@ -2,13 +2,23 @@
   "name": "tibber-aws",
   "version": "5.1.1",
   "description": "",
-  "main": "./lib/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "start": "babel-node ./samples/sample1.js",
+    "start": "babel-node samples/sample1.ts",
     "build": "babel ./src -d ./lib",
     "login": "npm-cli-login -u $NPM_USERNAME -p $NPM_PASSWORD -e $NPM_EMAIL",
-    "2npm": "publish",
-    "test": "ava  --verbose -s"
+    "test": "ava  --verbose -s",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix && sortier \"./**/*.{ts,tsx,js,jsx}\"",
+    "prepare": "yarn run compile",
+    "pretest": "yarn run compile",
+    "posttest": "yarn run lint",
+    "release": "semantic-release",
+    "release:local": "run.env semantic-release",
+    "cz": "git add . && cz",
+    "cz:init": "commitizen init cz-conventional-changelog --yarn --dev --exact"
   },
   "repository": {
     "type": "git",
@@ -29,11 +39,21 @@
     "@babel/plugin-transform-async-to-generator": "^7.10.1",
     "@babel/preset-env": "^7.10.1",
     "@babel/register": "^7.10.1",
+    "@snowcoders/sortier": "^3.2.0",
+    "@types/node": "^14.11.2",
+    "@types/randomstring": "^1.1.6",
     "ava": "^3.8.2",
     "babel-plugin-syntax-async-functions": "^6.8.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-node6": "^11.0.0",
-    "randomstring": "^1.1.5"
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "3.3.0",
+    "gts": "^3.0.3",
+    "husky": "^4.3.5",
+    "lint-staged": "^10.5.3",
+    "randomstring": "^1.1.5",
+    "semantic-release": "^17.3.0",
+    "typescript": "^4.0.3"
   },
   "engines": {
     "node": ">=9.0.0"
