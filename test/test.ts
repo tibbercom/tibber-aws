@@ -1,20 +1,13 @@
 import test from 'ava';
 import rand from 'randomstring';
 import {Readable} from 'stream';
-import {
-  Queue,
-  QueueSubjectListenerBuilder,
-  S3Bucket,
-  configure,
-  getLambdaFunc,
-  getSecret,
-} from '../src/index';
+import {QueueSubjectListenerBuilder, S3Bucket, configure} from '../src';
 
 configure({region: 'eu-west-1'});
 
 const testBucketName = 'tibber-tibber-ftw-123321';
 
-test.beforeEach(async t => {
+test.beforeEach(async () => {
   await S3Bucket.deleteIfExsists(testBucketName);
 });
 
@@ -52,7 +45,7 @@ test('should be able to retrieve object', async t => {
   const bucket = await S3Bucket.getBucket(testBucketName);
   const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
   await bucket.putObject('test', buffer, 'image/png');
-  const result = await bucket.getObject('test');
+  await bucket.getObject('test');
   t.pass();
 });
 
@@ -77,7 +70,7 @@ test('should be able to handle missing key exception', async t => {
   const name = rand.generate();
 
   try {
-    const result = await bucket.getObjectStream(name);
+    await bucket.getObjectStream(name);
   } catch (error) {
     t.is(error.message, 'Object not available');
   }

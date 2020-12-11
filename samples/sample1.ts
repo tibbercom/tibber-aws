@@ -21,7 +21,7 @@ async function sample() {
 }
 
 sample()
-  .then(_ => {
+  .then(() => {
     console.log('Sample done');
     // process.exit(0); or
     // throw Error('Early exit')
