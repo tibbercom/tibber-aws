@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
+    "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
     "@snowcoders/sortier": "^3.2.0",
     "@types/node": "^14.11.2",
