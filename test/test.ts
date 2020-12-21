@@ -1,4 +1,3 @@
-import test from 'ava';
 import rand from 'randomstring';
 import {Readable} from 'stream';
 import {QueueSubjectListenerBuilder, S3Bucket, configure} from '../src';
@@ -7,103 +6,102 @@ configure({region: 'eu-west-1'});
 
 const testBucketName = 'tibber-tibber-ftw-123321';
 
-test.beforeEach(async () => {
-  await S3Bucket.deleteIfExsists(testBucketName);
+describe('getBucket', () => {
+  beforeEach(async () => {
+    await S3Bucket.deleteIfExsists(testBucketName);
+  });
+
+  it('should be able to create bucket', async () => {
+    const result = await S3Bucket.getBucket(testBucketName);
+    expect(typeof result).toBe('object');
+  });
+
+  it('should get bucket if it already exists', async () => {
+    const result = await S3Bucket.getBucket(testBucketName);
+    const result2 = await S3Bucket.getBucket(testBucketName);
+    expect(result.name).toBe(result2.name);
+  });
+
+  it('getBuckets should return array', async () => {
+    const result = await S3Bucket.getBuckets();
+    expect(Array.isArray(result)).toBe(true);
+  });
+
+  it('should be able to put object without content type', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+    bucket.putObject('test', buffer);
+  });
+
+  it('should be able to put object with content type', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+    await bucket.putObject('test', buffer, 'image/png');
+  });
+
+  it('should be able to retrieve object', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+    await bucket.putObject('test', buffer, 'image/png');
+    await bucket.getObject('test');
+  });
+
+  it('should be able to retrieve object as stream', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+    await bucket.putObject('test', buffer, 'image/png');
+    const result = bucket.getObjectAsStream('test');
+    expect(result.createReadStream).toBeTruthy();
+  });
+
+  it('should be able to retrieve object as stream 2', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+    await bucket.putObject('test', buffer, 'image/png');
+    const result = await bucket.getObjectStream('test');
+    expect(result instanceof Readable).toBeTruthy();
+  });
+
+  it('should be able to handle missing key exception', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const name = rand.generate();
+
+    try {
+      await bucket.getObjectStream(name);
+    } catch (error) {
+      expect(error.message).toBe('Object not available');
+    }
+  });
+
+  it('should be able to check wheter object is available in S3', async () => {
+    const bucket = await S3Bucket.getBucket(testBucketName);
+    const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
+
+    let name = rand.generate();
+
+    await bucket.putObject(name, buffer, 'image/png');
+    let result = await bucket.objectAvailable(name);
+    expect(result).toBe(true);
+
+    name = rand.generate();
+
+    result = await bucket.objectAvailable(name);
+    expect(result).toBe(false);
+  });
 });
 
-test('should be able to create bucket', async t => {
-  const result = await S3Bucket.getBucket(testBucketName);
-  t.is(typeof result, 'object');
-});
-
-test('should get bucket if it already exists', async t => {
-  const result = await S3Bucket.getBucket(testBucketName);
-  const result2 = await S3Bucket.getBucket(testBucketName);
-  t.is(result.name, result2.name);
-});
-
-test('getBuckets should return array', async t => {
-  const result = await S3Bucket.getBuckets();
-  t.true(Array.isArray(result));
-});
-
-test('should be able to put object without content type', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-  bucket.putObject('test', buffer);
-  t.pass();
-});
-
-test('should be able to put object with content type', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-  await bucket.putObject('test', buffer, 'image/png');
-  t.pass();
-});
-
-test('should be able to retrieve object', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-  await bucket.putObject('test', buffer, 'image/png');
-  await bucket.getObject('test');
-  t.pass();
-});
-
-test('should be able to retrieve object as stream', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-  await bucket.putObject('test', buffer, 'image/png');
-  const result = bucket.getObjectAsStream('test');
-  t.truthy(result.createReadStream);
-});
-
-test('should be able to retrieve object as stream 2', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-  await bucket.putObject('test', buffer, 'image/png');
-  const result = await bucket.getObjectStream('test');
-  t.true(result instanceof Readable);
-});
-
-test('should be able to handle missing key exception', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const name = rand.generate();
-
-  try {
-    await bucket.getObjectStream(name);
-  } catch (error) {
-    t.is(error.message, 'Object not available');
-  }
-});
-
-test('should be able to assign several topics to builder', t => {
+it('should be able to assign several topics to builder', () => {
   const builder = new QueueSubjectListenerBuilder(
     'test-queueName',
     null,
     {name: 'test', subject: 'test'},
     {name: 'test2', subject: 'test2'}
   );
-  t.is(builder.topics.length, 2);
-});
-
-test('should be able to check wheter object is available in S3', async t => {
-  const bucket = await S3Bucket.getBucket(testBucketName);
-  const buffer = Buffer.from([8, 6, 7, 5, 3, 0, 9]);
-
-  let name = rand.generate();
-
-  await bucket.putObject(name, buffer, 'image/png');
-  let result = await bucket.objectAvailable(name);
-  t.true(result);
-
-  name = rand.generate();
-
-  result = await bucket.objectAvailable(name);
-  t.false(result);
+  expect(builder.topics.length).toBe(2);
 });
 
 /*
-test.only('run lambda func', async t => {
+it.only('run lambda func', async t => {
 
     configure({ region: 'eu-west-1' });
     /* const func = getLambdaFunc('pyml_fit_forecast_model_single_home');
@@ -122,20 +120,20 @@ test.only('run lambda func', async t => {
 
 
 
-test.only('getSecret', t=>{
+it.only('getSecret', t=>{
 
    console.log(getSecret('asdfa', 'connectionStringNodeJs'));
 
 })
 
 
-test.only('should be able to send message to queue', async t => {
+it.only('should be able to send message to queue', async t => {
 
     const queue = await Queue.createQueue('test-tibber-aws-queue');
     console.log(await queue.send('Test', { property: 'test' }));
 });
 
-test.only('should be able to assign several topics to builder', async (t) =>{
+it.only('should be able to assign several topics to builder', async (t) =>{
 
    try{
        let result = await Promise.all([new Promise((resolve,reject)=> reject('Go fuck yourself')),new Promise((resolve,reject)=>{console.log('ran');resolve("sweet");})]);
