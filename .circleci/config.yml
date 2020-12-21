@@ -6,10 +6,6 @@ workflows:
           context:
             - GITHUB
             - NPM
-          filters:
-            branches:
-              only:
-                - master
 jobs:
   build:
     working_directory: ~/package
