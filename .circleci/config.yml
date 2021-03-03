@@ -17,5 +17,5 @@ jobs:
           name: Deploy Package
           command: |
             yarn
-            yarn compile
+            yarn test
             yarn release
