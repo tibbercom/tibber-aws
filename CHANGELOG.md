@@ -1,3 +1,10 @@
+## [5.2.7](https://github.com/tibbercom/tibber-aws/compare/v5.2.6...v5.2.7) (2021-03-03)
+
+
+### Bug Fixes
+
+* fix zero being passes as MaxNumberOfMessages instead of undefined ([259c914](https://github.com/tibbercom/tibber-aws/commit/259c914d3e97ea0bbf043ae75fc753f909443b0b))
+
 ## [5.2.6](https://github.com/tibbercom/tibber-aws/compare/v5.2.5...v5.2.6) (2021-03-03)
 
 
