@@ -59,10 +59,13 @@ export class QueueSubjectListener {
       try {
         if (this.isStopped) return;
 
+        const maxNumberOfMessagesOrOne =
+          MaxNumberOfMessages === undefined ? 1 : MaxNumberOfMessages;
+
         const currentParams = {
           MaxNumberOfMessages: Math.min(
             10,
-            (MaxNumberOfMessages ?? 1) - cntInFlight
+            maxNumberOfMessagesOrOne - cntInFlight
           ),
           VisibilityTimeout,
           WaitTimeSeconds,
