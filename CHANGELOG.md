@@ -1,3 +1,10 @@
+## [5.2.8](https://github.com/tibbercom/tibber-aws/compare/v5.2.7...v5.2.8) (2021-03-09)
+
+
+### Bug Fixes
+
+* update semantic-release, to use marked >2.0.0 ([49cecc2](https://github.com/tibbercom/tibber-aws/commit/49cecc2a231aa1a4afec38f8f162bab076b496fb))
+
 ## [5.2.7](https://github.com/tibbercom/tibber-aws/compare/v5.2.6...v5.2.7) (2021-03-03)
 
 
